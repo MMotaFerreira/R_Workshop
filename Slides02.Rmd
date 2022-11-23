@@ -1,0 +1,379 @@
+---
+title: "Introduction to R environment"
+author: "Mário Mota-Ferreira"
+date: "`r Sys.Date()`"
+output: 
+  ioslides_presentation:
+    logo: H:\My Drive\Baden-Wutemberg Fish\Intro-R\Images\R_logo.svg
+    widescreen: yes
+    toc: yes
+    #smaller: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Basics of R
+
+This workshop serves as a primer to `R` by introducing the basics. You may follow via the `.rmd` file within RStudio rather than solely the compiled PDF. This way you can experiment with code in the "code blocks" provided. 
+
+__Note:__ In text R code is displayed in a `fixed-width` font. 
+
+### R Markdown
+
+This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+
+## What is [R](https://cran.r-project.org/)?
+
+R is a system for statistical computation and graphics. It consists of a language plus a run-time environment with graphics, a debugger, access to certain system functions, and the ability to run programs stored in script files. 
+
+### Why is R named R?
+
+The name is partly based on the (first) names of the first two R authors (Robert Gentleman and Ross Ihaka), and partly a play on the name of the Bell Labs language ‘S
+
+### Why use R
+
+- It's free (and will always be)
+- Powerful (you'll be able to perform complex analysis and plots)
+- Flexible (18747 available packages in [CRAN](https://cran.r-project.org/) repository)
+
+## R, as a Calculator
+
+The first thing to know about R is that it is essentially a large calculator capable of performing arithmetic:
+
+```{r 1_calc1, echo = TRUE}
+1 + 1
+8 * 8
+2 ^ 8 # exponent
+```
+
+## R, as a Calculator {.smaller}
+```{r 1_calc2, echo = TRUE}
+(5 + 2) ^ 4
+5 + 2 ^ 4
+```
+
+### R also supports elementary and algebraic functions:
+
+```{r 1_functions, echo = TRUE}
+log(100)
+sqrt(49)
+```
+## Order of Operations
+
+R solves equations according to the order of operations, "[PEMDAS](https://www.youtube.com/watch?v=94yAmf7GyHw)":
+
+1. Parentheses
+2. Exponents
+3. Multiplication
+4. Division
+5. Addition
+6. Subtraction
+
+
+### Chalenge:
+__Try this!__ Using R, solve:
+(5 + 1) ^ 4 / (9 - 2) ^ 3
+
+## Objects
+
+R is an "object oriented" programming language. Put simply, R uses objects to store attributes. Objects are created by assigning an attibute to them via the `<-` operation. You can always view the attribute of an object by typing the object name.
+
+```{r 1_object 1, echo = TRUE}
+object1 <- 10 + 10 
+object1
+```
+
+__Try this!__ Create a new object; you can name it almost anything!
+```{r 1_object 2, echo = F}
+object2 <- "Hello Word"
+```
+
+
+## R includes various functions for managing created objects.
+
+The `ls()` function lists all existing objects.
+
+```{r 1_list, echo = TRUE}
+ls()
+```
+The `rm()` function removes existing objects.
+
+```{r 1_remove, echo = TRUE}
+rm(object1)
+```
+## Naming Objects
+
+There is no strict convention for naming objects; however, there are best practices:
+
+1. Avoid spaces; use _underscores_, periods, or CamelCase (or camelCase) for long object names
+    - e.g., This_is_a_long_name, This.Is.A.Long.Name, thisIsALongName
+2. Avoid names of existing functions or reserved R objects
+    - e.g., `mean` or `sum` 
+3. Be descriptive but keep it short (less than 10 characters)
+4. Avoid special characters
+    - e.g., ? $ % ^ &
+5. Numbers are fine, but names cannot begin with numbers.
+    - e.g., `object1` is ok, but `1object` is not
+    
+
+## Naming Objects 
+__Important:__ Object names are case sensitive.
+    - e.g., `object.One` and `Object.One` refer to two separate objects
+
+```{r 1_newobject, echo = TRUE}
+object.One <- 10 + 10
+Object.One <- 5 + 5
+object.One
+Object.One
+```
+
+## Functions
+
+In addition to elementary and algebraic functions, R includes functions that simplify statistical analysis. For example, the `mean()` function calculates the mean. 
+
+__Note:__ Sometimes `na.rm = TRUE` is necessary within the paranetheses to instruct R to ignore missing data. 
+
+```{r 1_mean, echo = TRUE}
+mean(cars$dist, na.rm = TRUE)
+```
+
+A note about syntax: the dollar sign, `$`, is used to indicate the variable of interest relative to a data set: R calculated the mean using the `dist` variable within the `cars` data set by specifying `cars$dist`
+
+## Object Types {.smaller}
+
+The R `str()` function describes the structure of objects and functions.
+
+```{r 1_structure, echo = TRUE}
+str(mean)
+str(object.One)
+str(cars)
+str(cars$dist)
+```
+
+## Vectors {.smaller}
+
+In R, vectors are defined as a collection of data of the same type. The `c()` function creates a vector. There are different type of vectors
+
+```{r vector1, echo = T, results='hide'}
+nums <- c(-2,-1,0,1,2) #V. numerical
+str(nums)
+logic <- c(T,F,T,T,F) #V. logic
+str(logic)
+Names <- c("Travis", "Smith", "Sintson", "Brooke", "Stone") #Strings
+str(Names)
+length(Names) #??
+```
+__Note:__ Beware of mixing types of data:
+```{r vector2, echo = T, results='hide'}
+nums.names <- c(nums, Names)
+str(nums.names)
+```
+
+## Vectors {.smaller}
+### Special Values:
+NA (Not Available), NaN (Not a Number), Inf e –Inf (infinite)
+
+```{r vector3, echo = TRUE}
+Z <- c(NA, 1, 2)
+Z
+log(nums) #log() logarithimic function
+```
+
+```{r vector4, echo = T, results='hide'}
+nums * 2
+nums >= 1
+nums > -1 & nums < 2
+!(nums > -1 & nums < 2)
+```
+
+## Regular sequences {.smaller}
+The `:` operator:
+
+```{r Reg_Seq1, echo = T, results='hide'}
+1:15
+15:1
+```
+The `seq()` function:
+```{r Reg_Seq2, echo = T, results='hide'}
+seq(1,15)
+seq(from=15, to=1)
+seq(from=2, length=15, by=2)
+```
+The `rep()` functions:
+```{r Reg_Seq3, echo = T, results='hide'}
+rep(1:3, times = 2)
+rep(1:3, each=2)
+```
+___Try yourself:___ Define a vector of odd numbers between 13 and 27
+
+## Factors
+
+```{r Factors, echo = T}
+Gender <- c("F", "M", "M", "F", "M") #Strings
+Gender <- factor(Gender)	#convert to factor
+str(Gender) # levels as numbers
+Names[Gender=="M"]
+levels(Gender) <- c("Female", "Male")	#levels labels
+str(Gender)
+```
+## Indexing vectors 
+
+```{r Index_V, echo=TRUE, results='hold'}
+Names
+Names[2]
+Names[c(1,3)]
+Names[-c(1,3)]
+Names[logic]
+nums[!(nums > -1 & nums < 2)]
+Names[!(nums > -1 & nums < 2)]
+```
+
+## Matrices {.smaller}
+
+Matrix objects are generalization vectors for 2 dimensions. Matrices have the same data type (mode) and are defined by the number of rows and columns.
+```{r Matrix1, echo=TRUE, results='hide'}
+M <- matrix(1:12, nrow=3, ncol=4, byrow=FALSE)
+M
+dim(M) #returns the dimensions M
+
+A <- 1:20
+dim(A) <- c(5, 4) #Converts A to a matrix 5x4
+A
+as.vector(A) #back to vector
+
+rbind(nums,nums) 		#By rows
+cbind(A,nums)		#By colums 
+```
+
+Indexing (similar to vectors, but need a index for rows and a second for columns:
+```{r Matrix2, echo=TRUE, results='hide'}
+M[3,2]		
+M[3, ]	
+M[ ,2]		
+M[-2,c(1,4)]	#??
+```
+
+## Lists {.smaller}
+Lists are another generalization of vectors. An order collection of objects that can have different type and number of elements.
+```{r List1, echo=TRUE, results='hide'}
+Greyling <- list(Latin_Name = "Thymalus thymalus", family = "Salmonidae", 
+                 length_cm = rnorm(100, 30, 10), 
+                 rivers = c("Rhine", "Danube", "Neckar"), 
+                 Food_itens = matrix(rpois(20*3,2), nrow = 20, ncol = 3, 
+                                     dimnames = list(NULL, c("Insecta", "Crustacea", "Plants"))))
+Greyling
+str(Greyling)
+
+Greyling[[2]] #indexing by position (double square brackets)
+Greyling$Latin_Name #indexing by name
+
+Greyling$max_lenght <- max(Greyling$length_cm) #Create new element
+```
+
+## Data Frame
+A particular case of lists with all components with the same number elements or a generalization of matrices with columns with different type of data.
+
+```{r DF, echo=TRUE, results='hide'}
+str(chickwts)
+head(chickwts)		#see fist rows
+chickwts[,2]		# Matrix notation
+chickwts[[2]]		# List notation
+chickwts$feed		# List notation
+```
+Data frames are the working standard in R
+
+## Data Frame
+
+___Try:___ Using the data frame `chickwts`
+
+1. How many records has the table?
+2. How many food supplements were tested?
+3. What are the weights of chickens that were fed on “linseed”?
+4. How many supplements were given to chickens over 350 g?
+5. What are the weights and supplements given to chickens under 160g?
+6. What are the weights and supplements given to chickens fed on “soybean” or “linseed”
+
+```{r DF2, echo=FALSE, results='hide'}
+nrow(chickwts)#1
+length(levels(chickwts$feed))#2
+chickwts$weight[chickwts$feed=="linseed"]#3
+chickwts$feed[chickwts$weight>350]#4
+chickwts[chickwts$weight<160,]#5
+chickwts[chickwts$feed=="linseed" | chickwts$feed=="soybean",]#6
+```
+
+## Packages
+
+Packages expand R to include additional functions important to statistical analysis.
+
+### Installing Packages
+
+Installing packages in R can be performed via `install.packages("packagename")`, whereby the name of the desired package must be within quotation marks.
+
+__Note:__ Occasionally a package may require dependencies for installation. The dependencies can be automatically installed along with the package by including the `dependencies = TRUE` argument within the `install.packages()` function.
+
+__Try__ Use this code to install the following package: `tidyverse`
+```{r pkgs1, echo=FALSE, eval= F}
+install.packages("tidyverse", dependencies = T)
+```
+
+## Packages
+The [tidyverse](https://www.tidyverse.org/ ) is an collection of R packages designed for data science that share design philosophy, grammar, and data structures. 
+
+### Loading Packages
+
+After installation, packages must be loaded to use their functions within R. Packages are loaded via `library(packagename)`.
+__Note:__ The `library()` function does not require quotation marks around the package name. 
+
+```{r pkgs2, echo=T}
+library(tidyverse)
+```
+
+## R Help
+
+R includes a help function to assist with functions, accessible by including a `?` prior to the function name.
+
+```{r 1_help, echo = TRUE, eval=FALSE}
+?mean
+```
+
+__Note:__ The help documentation will display in the bottom right quadrant of RStudio. Alternatively, typing the function name into the help search bar will yield a similar result. 
+
+To search all of R documentation for help about a function, use `??`.
+
+```{r 1_search, echo = TRUE, eval=FALSE}
+??mean
+```
+
+__Note:__ Google is a valuable tool for finding help. Large communities like [StackOverflow](https://stackoverflow.com/) provide answers and explanations to common issues in R. At times, a particular problem may seem unique, but someone else has almost certainly had the same problem and the solution likely can be found online.
+
+## Setting a Working Directory
+
+The working directory is the location where files are accessed and saved within a R session. Normally, the working directory is set at the beginning of every R file. The working directory should be set and the class data loaded at the beginning of each session.
+
+There are two methods of setting the working directory. First, the `setwd()` function can be used with the directory path. For example, `setwd("C:/Directory/_to/_folder/")`. 
+
+Second, within RStudio, the "Session" tab will allow you to set the working directory. 
+
+The `getwd()` function returns the set working directory.
+
+```{r 1_directory, echo = TRUE}
+getwd()
+```
+
+## Import Data!
+
+R can read many different file types, including text files, Excel files, Google Sheet files, SPSS files, and Stata files. It can even read data sets directly from websites. The file type determines the function that is necessary import a data set. For example, CSV files use the function `read.csv` to import a dataset. Here is an example that uses this function:
+
+`ds <- read.csv("Class Data Set Factored.csv", header = TRUE)`
+
+This line of code saves the data set in `Class Data Set Factored.csv` to an object called ds (short for data set). The `header = TRUE` argument tells R that the first row in the data set provides column (or variable) names.
+
+___Note:___ It's is also possible there's a necessity to define a suitable separator with the `sep` argument as follows `sep = ";"` or `sep = ","`.
+
+___Try your own table!___
+
